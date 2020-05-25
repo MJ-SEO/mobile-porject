@@ -4,6 +4,7 @@ import 'package:pproject/login.dart';
 import 'package:pproject/home.dart';
 import 'package:pproject/profile.dart';
 import 'package:pproject/gls.dart';
+import 'package:pproject/zz.dart';
 
 class MyApp extends StatelessWidget {
   @override
@@ -18,6 +19,7 @@ class MyApp extends StatelessWidget {
         '/Profile' : (context) => ProfilePage(),
         '/GLS' : (context) => GlsPage(),
         '/Choice' : (context) => ChoicePage(),
+        '/Zz' : (context) => ZzPage(),
       },
       onGenerateRoute: _getRoute,
     );

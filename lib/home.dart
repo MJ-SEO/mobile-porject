@@ -2,6 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pproject/profile.dart';
 import 'package:pproject/gls.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:pproject/zz.dart';
+
+final FirebaseAuth _auth = FirebaseAuth.instance;
 
 class PassArg {
   final String uid;
@@ -16,9 +20,15 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
 
+  String uid;
+
+  void _gerCur() async{
+    final FirebaseUser user = await _auth.currentUser();
+    uid = user.uid.toString();
+  }
+
   @override
   Widget build(BuildContext context) {
-    final PassArg args = ModalRoute.of(context).settings.arguments;
 
     return Scaffold(
         appBar: AppBar(
@@ -29,10 +39,13 @@ class _HomePageState extends State<HomePage> {
               Icons.person,
               semanticLabel: 'person',
             ),
-            onPressed: (){
-                Navigator.pushNamed(
+            onPressed: () async{
+                _gerCur();
+                print(uid);
+                  Navigator.pushNamed(
                   context,
                   '/Profile',
+                    arguments: Proarg(uid),
               );
             },
           ),
@@ -68,9 +81,10 @@ class _HomePageState extends State<HomePage> {
                     Text("글로벌리더십\n       학부", style: TextStyle(color: Colors.white, fontSize: 13))
                   ],
                 ),
-                onPressed: () {
-                      print(args.uid);
-                      Navigator.pushNamed(context, "/GLS", arguments: Glsarg(args.uid));
+                onPressed: () async{
+                      _gerCur();
+                      print(uid);
+                      Navigator.pushNamed(context, "/GLS", arguments: Glsarg(uid));
                 },
               ),
               RaisedButton(
@@ -83,8 +97,10 @@ class _HomePageState extends State<HomePage> {
                     Text("전산전자\n 공학부", style: TextStyle(color: Colors.white, fontSize: 14),)
                   ],
                 ),
-                onPressed: () {
-                  //    Navigator.pushNamed(context, "교양선택 페이지")
+                onPressed: () async{
+                  _gerCur();
+                  print(uid);
+                  Navigator.pushNamed(context, "/Zz", arguments: ZZarg(uid));
                 },
               ),
               RaisedButton(

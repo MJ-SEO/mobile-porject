@@ -2,14 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:pproject/app.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class Glsarg{
+class ZZarg{
   final String uid;
-  Glsarg(this.uid);
+  ZZarg(this.uid);
 }
 
 class Record {
   final String name;
-  int heart;
   final int credit;
   final DocumentReference reference;
 
@@ -17,19 +16,18 @@ class Record {
   Record.fromMap(Map<String, dynamic> map, {this.reference})
       : assert(map['name'] != null),
         name = map['name'],
-        heart = map['heart'],
         credit = map['credit'];
 
   Record.fromSnapshot(DocumentSnapshot snapshot)
       : this.fromMap(snapshot.data, reference: snapshot.reference);
 }
 
-class GlsPage extends StatefulWidget {
+class ZzPage extends StatefulWidget {
   @override
-  _GlsPageState createState() => _GlsPageState();
+  _ZzPageState createState() => _ZzPageState();
 }
 
-class _GlsPageState extends State<GlsPage> {
+class _ZzPageState extends State<ZzPage> {
   bool _contain = false;
 
   @override
@@ -39,7 +37,7 @@ class _GlsPageState extends State<GlsPage> {
       appBar: AppBar(
           centerTitle: true,
           backgroundColor: Colors.blueGrey,
-          title: Text('글로벌리더십학부'),
+          title: Text('전산전자공학부'),
           actions: <Widget>[
             IconButton(
               icon: Icon(
@@ -57,7 +55,7 @@ class _GlsPageState extends State<GlsPage> {
 
   Widget _buildBody(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-      stream: Firestore.instance.collection('gls').snapshots(),
+      stream: Firestore.instance.collection('zz').snapshots(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) return LinearProgressIndicator();
         return _buildList(context, snapshot.data.documents);
@@ -72,31 +70,17 @@ class _GlsPageState extends State<GlsPage> {
   }
 
   Widget _buildListItem(BuildContext context, DocumentSnapshot data) {
-    final Glsarg args = ModalRoute.of(context).settings.arguments;
+    final ZZarg args = ModalRoute.of(context).settings.arguments;
     final record = Record.fromSnapshot(data);
     return ListTile(
         leading: IconButton(
-          icon: record.heart == 0? Icon(Icons.favorite_border, color: Colors.red,)
-          : Icon(Icons.favorite, color: Colors.red,),
+          icon: Icon(Icons.favorite, color: Colors.red,),
           onPressed: (){
             setState(() {
-              record.heart == 0? Firestore.instance.collection('gls').document(record.name).updateData({'heart': 1})
-                  :Firestore.instance.collection('gls').document(record.name).updateData({'heart': 0});
+
             });
-            if(record.heart==0){
-
-             /*   CollectionReference snap = Firestore.instance.collection('user').document(args.uid).collection(collectionPath);
-                QuerySnapshot _q = await snap.where("ddd", isEqualTo: record.name).getDocuments();
-                if(_q.documents.length > 0){
-
-                }*/
-                Firestore.instance.collection('user').document(args.uid).updateData({"present" : FieldValue.increment(record.credit)});
-                Firestore.instance.collection('user').document(args.uid).updateData({"require" : FieldValue.increment(-record.credit)});
-            }
-            else{
-              Firestore.instance.collection('user').document(args.uid).updateData({"present" : FieldValue.increment(-record.credit)});
-              Firestore.instance.collection('user').document(args.uid).updateData({"require" : FieldValue.increment(record.credit)});
-            }
+            Firestore.instance.collection('user').document(args.uid).collection("class").document(record.name).
+            setData({"name" : record.name});
           },
         ),
         title: Text(record.name, style: TextStyle(color: Colors.white),),

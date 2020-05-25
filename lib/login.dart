@@ -17,7 +17,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.blue,
+      backgroundColor: Color.fromRGBO(38, 55, 85, 1),
       body: SafeArea(
         child: ListView(
           padding: EdgeInsets.symmetric(horizontal: 24.0),
@@ -26,24 +26,33 @@ class _LoginPageState extends State<LoginPage> {
             Column(
               children: <Widget>[
                 SizedBox(height: 16.0,),
-                Image.network('https://upload.wikimedia.org/wikipedia/commons/0/09/HGU-Emblem-eng2.png', scale: 1.7),
+                Image.asset('assets/LOGO2.png', scale: 0.8),
                 SizedBox(height: 16.0),
               ],
             ),
-            SizedBox(height: 30),
+            SizedBox(height: 90),
             Container(
               height: 60,
               child: RaisedButton(
-                color: Color.fromRGBO(255, 30, 30, 90),
+                color: Color.fromRGBO(222, 177, 94, 1),
                 child: Row(
                   children: <Widget>[
                     Icon(Icons.person, color: Colors.white),
-                    Text("      sign in google", style: TextStyle(color: Colors.white, fontSize: 20),),
+                    Text("      Sign in google", style: TextStyle(color: Colors.white, fontSize: 20),),
                   ],
                 ),
                 onPressed: () async{
-                  _signInWithGoogle();
-                  Navigator.pushNamed(context, '/Choice');
+                  final FirebaseUser user = await auth.currentUser();
+                  if (user == null) {
+                    _signInWithGoogle();
+                    Navigator.pushNamed(
+                      context,
+                      '/Choice',
+                    );
+                  }
+                  else{
+                    Navigator.pushNamed(context, '/Home');
+                  }
                 },
               ),
             ),
@@ -51,31 +60,37 @@ class _LoginPageState extends State<LoginPage> {
             Container(
               height: 60,
               child: RaisedButton(
-                color: Color.fromRGBO(255, 255, 255, 90),
+                color: Color.fromRGBO(206, 202, 193, 1),
                 child: Row(
                   children: <Widget>[
                     Icon(Icons.help, color: Colors.white),
-                    Text("      sign in anonymous", style: TextStyle(color: Colors.white, fontSize: 20),),
+                    Text("      Sign in anonymous", style: TextStyle(color: Colors.white, fontSize: 20),),
                   ],
                 ),
-                onPressed: () async{
-                  _signInAn();
-                  Navigator.pushNamed(
-                    context,
-                    '/Choice',
-                  );
-                },
+                onPressed: () async {
+                  final FirebaseUser user = await auth.currentUser();
+                  if (user == null) {
+                    _signInAn();
+                    Navigator.pushNamed(
+                      context,
+                      '/Choice',
+                    );
+                  }
+                  else{
+                    Navigator.pushNamed(context, '/Home');
+                  }
+                }
               ),
             ),
             SizedBox(height: 20,),
             Container(
               height: 60,
               child: RaisedButton(
-                color: Color.fromRGBO(123, 123, 123, 90),
+                color: Color.fromRGBO(186, 169, 151, 1),
                 child: Row(
                   children: <Widget>[
                     Icon(Icons.next_week, color: Colors.white),
-                    Text("      go main page", style: TextStyle(color: Colors.white, fontSize: 20),),
+                    Text("      Go main page", style: TextStyle(color: Colors.white, fontSize: 20),),
                   ],
                 ),
                 onPressed: () async{
@@ -83,7 +98,7 @@ class _LoginPageState extends State<LoginPage> {
                   if(user == null)
                     print("gsdfg");
                   else
-                    Navigator.pushNamed(context, '/Choice');
+                    Navigator.pushNamed(context, '/Home');
                 },
               ),
             ),
