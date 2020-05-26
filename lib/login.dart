@@ -96,7 +96,7 @@ class _LoginPageState extends State<LoginPage> {
                 onPressed: () async{
                  final FirebaseUser user = await auth.currentUser();
                   if(user == null)
-                    print("Please login!");
+                    print("Please login!!");
                   else
                     Navigator.pushNamed(context, '/Home');
                 },
