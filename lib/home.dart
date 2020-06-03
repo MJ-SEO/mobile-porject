@@ -4,6 +4,7 @@ import 'package:pproject/profile.dart';
 import 'package:pproject/gls.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:pproject/zz.dart';
+import 'package:pproject/mylist.dart';
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
 
@@ -56,7 +57,12 @@ class _HomePageState extends State<HomePage> {
                 Icons.menu,       // 여기 drawer?
               ),
               onPressed: () {
-
+                _gerCur();
+                Navigator.pushNamed(
+                    context,
+                    '/Mylist',
+                    arguments: Marg(uid),
+                );
               },
             ),
           ],

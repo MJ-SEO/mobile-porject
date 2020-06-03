@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pproject/choice.dart';
 import 'package:pproject/login.dart';
 import 'package:pproject/home.dart';
+import 'package:pproject/mylist.dart';
 import 'package:pproject/profile.dart';
 import 'package:pproject/gls.dart';
 import 'package:pproject/zz.dart';
@@ -20,6 +21,7 @@ class MyApp extends StatelessWidget {
         '/GLS' : (context) => GlsPage(),
         '/Choice' : (context) => ChoicePage(),
         '/Zz' : (context) => ZzPage(),
+        '/Mylist' : (context) => MylistPage(),
       },
       onGenerateRoute: _getRoute,
     );

@@ -101,28 +101,29 @@ class _ZzPageState extends State<ZzPage> {
     Widget _buildListItem(BuildContext context, DocumentSnapshot data) {
       final ZZarg args = ModalRoute.of(context).settings.arguments;
       final record = Record.fromSnapshot(data);
-
       return FutureBuilder(
         future: con(args.uid,record.name),
         builder: (BuildContext context, AsyncSnapshot<bool> snapshot){
-          if(snapshot.hasData == null){
-            Text("nonono");
+          if(snapshot.hasData || snapshot.hasError){
+            CircularProgressIndicator();
+            Future.delayed(const Duration(seconds: 3));
           }
           return ListTile(
             leading: IconButton (
                 icon: snapshot.data ? Icon(Icons.favorite, color: Colors.red) : Icon(Icons.favorite_border, color: Colors.red),
             onPressed: (){
               setState(() {
-                checkIfLikedOrNot(args.uid, record.name);
-                if(!contain){
-                  Firestore.instance.collection('user').document(args.uid).
-                  collection("class").document(record.name)
-                      .setData({"name": record.name});
+                if(!snapshot.data){
+                  Firestore.instance.collection('user').document(args.uid).collection("class").document(record.name).setData({"name": record.name, "grade" : 0, "credit": record.credit});
+                  Firestore.instance.collection('user').document(args.uid).updateData({"present" : FieldValue.increment(record.credit)});
+                  Firestore.instance.collection('user').document(args.uid).updateData({"require" : FieldValue.increment(-record.credit)});
                 }
                 else{
                   Firestore.instance.collection('user').document(args.uid)
                       .collection("class").document(record.name)
                       .delete();
+                  Firestore.instance.collection('user').document(args.uid).updateData({"present" : FieldValue.increment(-record.credit)});
+                  Firestore.instance.collection('user').document(args.uid).updateData({"require" : FieldValue.increment(record.credit)});
                 }
               });
             },

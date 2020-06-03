@@ -111,7 +111,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       style: TextStyle(fontSize: 18.0, color: Colors.white),
                       maxLines: 1),
                   SizedBox(height: 30,),
-                  Text("여태까지 들은 학점 평균: " + snapshot.data['average'].toString(),
+                  Text("여태까지 들은 학점 평균: " + (snapshot.data['sum']/snapshot.data['present']).toString(),
                       style: TextStyle(fontSize: 18.0, color: Colors.white),
                       maxLines: 1),
                   SizedBox(height: 30),

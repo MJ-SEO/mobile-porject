@@ -71,35 +71,49 @@ class _GlsPageState extends State<GlsPage> {
     );
   }
 
+  static Future<bool> con(String uid, String name) async{
+    DocumentSnapshot a = await Firestore.instance.collection('user').document(uid).collection('class').document(name).get();
+    if(a.exists){
+      return Future<bool>.value(true);
+    }
+    else {
+      return Future<bool>.value(false);
+    }
+  }
+
   Widget _buildListItem(BuildContext context, DocumentSnapshot data) {
     final Glsarg args = ModalRoute.of(context).settings.arguments;
     final record = Record.fromSnapshot(data);
-    return ListTile(
-        leading: IconButton(
-          icon: record.heart == 0? Icon(Icons.favorite_border, color: Colors.red,)
-          : Icon(Icons.favorite, color: Colors.red,),
-          onPressed: (){
-            setState(() {
-              record.heart == 0? Firestore.instance.collection('gls').document(record.name).updateData({'heart': 1})
-                  :Firestore.instance.collection('gls').document(record.name).updateData({'heart': 0});
-            });
-            if(record.heart==0){
-
-             /*   CollectionReference snap = Firestore.instance.collection('user').document(args.uid).collection(collectionPath);
-                QuerySnapshot _q = await snap.where("ddd", isEqualTo: record.name).getDocuments();
-                if(_q.documents.length > 0){
-
-                }*/
-                Firestore.instance.collection('user').document(args.uid).updateData({"present" : FieldValue.increment(record.credit)});
-                Firestore.instance.collection('user').document(args.uid).updateData({"require" : FieldValue.increment(-record.credit)});
-            }
-            else{
-              Firestore.instance.collection('user').document(args.uid).updateData({"present" : FieldValue.increment(-record.credit)});
-              Firestore.instance.collection('user').document(args.uid).updateData({"require" : FieldValue.increment(record.credit)});
-            }
-          },
-        ),
-        title: Text(record.name, style: TextStyle(color: Colors.white),),
+    return FutureBuilder(
+        future: con(args.uid,record.name),
+        builder: (BuildContext context, AsyncSnapshot<bool> snapshot){
+          if(snapshot.hasData || snapshot.hasError){
+            CircularProgressIndicator();
+            Future.delayed(const Duration(seconds: 3));
+          }
+          return ListTile(
+            leading: IconButton (
+              icon: snapshot.data ? Icon(Icons.favorite, color: Colors.red) : Icon(Icons.favorite_border, color: Colors.red),
+              onPressed: (){
+                setState(() {
+                  if(!snapshot.data){
+                    Firestore.instance.collection('user').document(args.uid).collection("class").document(record.name).setData({"name": record.name, "grade" : 0, "credit": record.credit});
+                    Firestore.instance.collection('user').document(args.uid).updateData({"present" : FieldValue.increment(record.credit)});
+                    Firestore.instance.collection('user').document(args.uid).updateData({"require" : FieldValue.increment(-record.credit)});
+                  }
+                  else{
+                    Firestore.instance.collection('user').document(args.uid)
+                        .collection("class").document(record.name)
+                        .delete();
+                    Firestore.instance.collection('user').document(args.uid).updateData({"present" : FieldValue.increment(-record.credit)});
+                    Firestore.instance.collection('user').document(args.uid).updateData({"require" : FieldValue.increment(record.credit)});
+                  }
+                });
+              },
+            ),
+            title: Text(record.name, style: TextStyle(color: Colors.white),),
+          );
+        }
     );
   }
 
