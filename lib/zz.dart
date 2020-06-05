@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:pproject/app.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'dart:async';
 
 
 class ZZarg{
@@ -33,7 +34,10 @@ class ZzPage extends StatefulWidget {
   _ZzPageState createState() => _ZzPageState();
 }
 
+
 class _ZzPageState extends State<ZzPage> {
+
+  @override
 
   FirebaseUser user;
   bool contain = false;
@@ -90,23 +94,30 @@ class _ZzPageState extends State<ZzPage> {
 
   static Future<bool> con(String uid, String name) async{
     DocumentSnapshot a = await Firestore.instance.collection('user').document(uid).collection('class').document(name).get();
+    Future<bool> re = Future.value(true);
     if(a.exists){
-      return Future<bool>.value(true);
+      re = Future<bool>.value(true);
     }
     else {
-      return Future<bool>.value(false);
+      re = Future<bool>.value(false);
     }
+
+    return re;
   }
 
     Widget _buildListItem(BuildContext context, DocumentSnapshot data) {
       final ZZarg args = ModalRoute.of(context).settings.arguments;
       final record = Record.fromSnapshot(data);
+      var a = con(args.uid,record.name);
       return FutureBuilder(
-        future: con(args.uid,record.name),
+        future: a,
         builder: (BuildContext context, AsyncSnapshot<bool> snapshot){
-          if(snapshot.hasData || snapshot.hasError){
-            CircularProgressIndicator();
-            Future.delayed(const Duration(seconds: 3));
+          if(snapshot.data == null) {
+            return Center(
+              heightFactor: 100,
+              child: LinearProgressIndicator(
+              ),
+            );
           }
           return ListTile(
             leading: IconButton (

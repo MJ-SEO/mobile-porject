@@ -87,9 +87,12 @@ class _GlsPageState extends State<GlsPage> {
     return FutureBuilder(
         future: con(args.uid,record.name),
         builder: (BuildContext context, AsyncSnapshot<bool> snapshot){
-          if(snapshot.hasData || snapshot.hasError){
-            CircularProgressIndicator();
-            Future.delayed(const Duration(seconds: 3));
+          if(snapshot.data == null) {
+            return Center(
+              heightFactor: 100,
+              child: LinearProgressIndicator(
+              ),
+            );
           }
           return ListTile(
             leading: IconButton (
