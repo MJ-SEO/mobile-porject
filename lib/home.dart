@@ -43,7 +43,7 @@ class _HomePageState extends State<HomePage> {
             onPressed: () async{
                 _gerCur();
                 print(uid);
-                  Navigator.pushNamed(
+                await Navigator.pushNamed(
                   context,
                   '/Profile',
                     arguments: Proarg(uid),
@@ -56,9 +56,9 @@ class _HomePageState extends State<HomePage> {
               icon: Icon(
                 Icons.menu,       // 여기 drawer?
               ),
-              onPressed: () {
+              onPressed: () async{
                 _gerCur();
-                Navigator.pushNamed(
+                await Navigator.pushNamed(
                     context,
                     '/Mylist',
                     arguments: Marg(uid),

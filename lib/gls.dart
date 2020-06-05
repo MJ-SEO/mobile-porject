@@ -30,7 +30,6 @@ class GlsPage extends StatefulWidget {
 }
 
 class _GlsPageState extends State<GlsPage> {
-  bool _contain = false;
 
   @override
   Widget build(BuildContext context) {
@@ -57,7 +56,7 @@ class _GlsPageState extends State<GlsPage> {
 
   Widget _buildBody(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-      stream: Firestore.instance.collection('gls').snapshots(),
+      stream: Firestore.instance.collection('gls').orderBy('name').snapshots(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) return LinearProgressIndicator();
         return _buildList(context, snapshot.data.documents);
