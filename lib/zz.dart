@@ -4,6 +4,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'dart:async';
 
+import 'package:pproject/recommend.dart';
+
 final FirebaseAuth _auth = FirebaseAuth.instance;
 
 class ZZarg{
@@ -130,7 +132,10 @@ class _ZzPageState extends State<ZzPage> {
           title: Text(record.name, style: TextStyle(color: Colors.white),),
           trailing: IconButton(
             icon: Icon(Icons.chat, color: Colors.white),
-
+            onPressed: () async{
+              _gerCur();
+              Navigator.pushNamed(context, "/Recommend", arguments: Narg(record.name, "zz", uid));
+            },
           ),
           );
         }

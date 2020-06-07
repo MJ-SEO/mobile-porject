@@ -5,6 +5,7 @@ import 'package:pproject/home.dart';
 import 'package:pproject/mylist.dart';
 import 'package:pproject/profile.dart';
 import 'package:pproject/gls.dart';
+import 'package:pproject/recommend.dart';
 import 'package:pproject/zz.dart';
 
 class MyApp extends StatelessWidget {
@@ -22,6 +23,7 @@ class MyApp extends StatelessWidget {
         '/Choice' : (context) => ChoicePage(),
         '/Zz' : (context) => ZzPage(),
         '/Mylist' : (context) => MylistPage(),
+        '/Recommend' : (context) => RecommendPage(),
       },
       onGenerateRoute: _getRoute,
     );
