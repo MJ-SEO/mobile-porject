@@ -83,13 +83,6 @@ class _ChoicePageState extends State<ChoicePage> {
               );
             },
         ),
-            RaisedButton(
-              child: Text("ddddddd"),
-              onPressed: (){
-                print(tags);
-                print(tags2);
-              }
-            )
       ]
     )
     );
@@ -101,7 +94,6 @@ class _ChoicePageState extends State<ChoicePage> {
       "major2" : tags2.toString(),
       "present" : 0,
       "require" : 133,
-      "average" : 0,
       "sum" : 0,
     });
   }

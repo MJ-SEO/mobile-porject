@@ -22,7 +22,7 @@ class Record {
   final String major2;
   final int present;
   final int require;
-  final int average;
+  var sum;
   final DocumentReference reference;
 
 
@@ -32,7 +32,7 @@ class Record {
         major2 = map['major2'],
         present = map['present'],
         require = map['require'],
-        average = map['average'];
+        sum = map['sum'];
 
   Record.fromSnapshot(DocumentSnapshot snapshot)
       : this.fromMap(snapshot.data, reference: snapshot.reference);
@@ -48,21 +48,17 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
 
-  @override
-  initState() {
-    super.initState();
-    Future.delayed(Duration(seconds: 1));
-    _setting();
-  }
-
   String a;
 
-  void _setting(){
-    a = "에ㅇ베베";
+  getp(int a) async{
+   p = a;
   }
 
-  getp(int a){
-    p = a;
+  void _getp() async{
+    _gerCur();
+    DocumentSnapshot a = await Firestore.instance.collection('user').document(uid).get();
+    p = a.data['present'];
+
   }
 
   Firestore db;
@@ -98,11 +94,12 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
             ]
         ),
-        body: FutureBuilder(
-          future: _auth.currentUser(),
-          builder: (BuildContext context, AsyncSnapshot<FirebaseUser> snapshot) {
+        body:
+        /*
+        FutureBuilder(
+          future: Firestore.instance.collection('user').document(uid).get(),
+          builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
             if (snapshot.data == null) {
-              _gerCur();
               return Center(
                 heightFactor: 100,
                 child: LinearProgressIndicator(
@@ -112,12 +109,12 @@ class _ProfilePageState extends State<ProfilePage> {
             else {
               return StreamBuilder<DocumentSnapshot>(
                 stream: Firestore.instance.collection("user")
-                    .document(uid)
+                    .document(args.uid)
                     .snapshots(),
                 builder: (context, snapshot) {
+                  _getp();
                   final record = Record.fromSnapshot(snapshot.data);
-                  getp(snapshot.data['present']);
-                  if (snapshot.data == null) return LinearProgressIndicator();
+              //    if (snapshot.data == null) return LinearProgressIndicator();
                   return Container(
                       padding: EdgeInsets.symmetric(horizontal: 15.0),
                       child: Column(
@@ -141,9 +138,8 @@ class _ProfilePageState extends State<ProfilePage> {
                               style: TextStyle(fontSize: 18.0, color: Colors.white),
                               maxLines: 1),
                           SizedBox(height: 30,),
-                          Text("여태까지 들은 학점 평균: " +
-                              (snapshot.data['sum'] / snapshot.data['present'])
-                                  .toString(),
+                          Text("여태까지 들은 학점 평균: " +(snapshot.data['sum'] / snapshot.data['present'])
+                              .toStringAsFixed(3),
                               style: TextStyle(fontSize: 18.0, color: Colors.white),
                               maxLines: 1),
                           SizedBox(height: 30),
@@ -153,7 +149,6 @@ class _ProfilePageState extends State<ProfilePage> {
                                 "세부현황 보기"
                             ),
                             onPressed: () {
-                              print(uid);
                             },
                           ),
                           Container(
@@ -179,7 +174,9 @@ class _ProfilePageState extends State<ProfilePage> {
             }
           },
         ),
-/*
+        */
+
+
         StreamBuilder<DocumentSnapshot>(
           stream: Firestore.instance.collection("user")
               .document(args.uid)
@@ -210,11 +207,10 @@ class _ProfilePageState extends State<ProfilePage> {
                         style: TextStyle(fontSize: 18.0, color: Colors.white),
                         maxLines: 1),
                     SizedBox(height: 30,),
-                    Text("여태까지 들은 학점 평균: " +
-                        (snapshot.data['sum'] / snapshot.data['present'])
-                            .toString(),
+                    Text("여태까지 들은 학점 평균: " + (snapshot.data['sum'] / snapshot.data['present'])
+                        .toStringAsFixed(3),
                         style: TextStyle(fontSize: 18.0, color: Colors.white),
-                        maxLines: 1),
+                    ),
                     SizedBox(height: 30),
                     RaisedButton(
                       color: Colors.greenAccent,
@@ -246,7 +242,6 @@ class _ProfilePageState extends State<ProfilePage> {
           },
         )
       // _buildBody(context),
-    );*/
     );
   }
     void _signOut() async {

@@ -152,7 +152,7 @@ class _RecommendPageState extends State<RecommendPage> {
     SizedBox(height: 50);
     final record = Record.fromSnapshot(data);
           return ListTile(
-            leading: Text(record.star.toString(), style: TextStyle(color: Colors.white)),
+            leading: Text(record.star.toString(), style: TextStyle(color: Colors.white, fontSize: 20.0)),
             title: Text(record.eval, style: TextStyle(color: Colors.white)),
           );
   }

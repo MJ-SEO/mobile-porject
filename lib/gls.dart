@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pproject/app.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:pproject/recommend.dart';
 
 class Glsarg{
   final String uid;
@@ -114,6 +115,12 @@ class _GlsPageState extends State<GlsPage> {
               },
             ),
             title: Text(record.name, style: TextStyle(color: Colors.white),),
+            trailing: IconButton(
+              icon: Icon(Icons.chat, color: Colors.white),
+              onPressed: () async{
+                Navigator.pushNamed(context, "/Recommend", arguments: Narg(record.name, "gls", args.uid));
+              },
+            ),
           );
         }
     );

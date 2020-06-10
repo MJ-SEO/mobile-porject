@@ -7,6 +7,9 @@ import 'package:pproject/profile.dart';
 import 'package:pproject/gls.dart';
 import 'package:pproject/recommend.dart';
 import 'package:pproject/zz.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
+final FirebaseAuth _auth = FirebaseAuth.instance;
 
 class MyApp extends StatelessWidget {
   @override
