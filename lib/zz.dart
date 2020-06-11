@@ -84,7 +84,7 @@ class _ZzPageState extends State<ZzPage> {
     );
   }
 
-  static Future<bool> con(String uid, String name) async{
+  Future<bool> con(String uid, String name) async{
     DocumentSnapshot a = await Firestore.instance.collection('user').document(uid).collection('class').document(name).get();
     if(a.exists){
       return Future<bool>.value(true);
@@ -101,6 +101,7 @@ class _ZzPageState extends State<ZzPage> {
       return FutureBuilder(
         future: con(args.uid,record.name),
         builder: (BuildContext context, AsyncSnapshot<bool> snapshot){
+          _gerCur();
           if(snapshot.data == null) {
             return Center(
               heightFactor: 100,
@@ -110,9 +111,8 @@ class _ZzPageState extends State<ZzPage> {
           }
           return ListTile(
             leading: IconButton (
-                icon: snapshot.data ? Icon(Icons.favorite, color: Colors.red) : Icon(Icons.favorite_border, color: Colors.red),
+              icon: snapshot.data ? Icon(Icons.favorite, color: Colors.red) : Icon(Icons.favorite_border, color: Colors.red),
               onPressed: (){
-                  _gerCur();
               setState(() {
                 if(!snapshot.data){
                   Firestore.instance.collection('user').document(uid).collection("class").document(record.name).setData({"name": record.name, "grade" : 0, "credit": record.credit});

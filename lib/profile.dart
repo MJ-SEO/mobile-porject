@@ -95,7 +95,74 @@ class _ProfilePageState extends State<ProfilePage> {
             ]
         ),
         body:
-        /*
+        StreamBuilder<DocumentSnapshot>(
+          stream: Firestore.instance.collection("user")
+              .document(args.uid)
+              .snapshots(),
+          builder: (context, snapshot) {
+            getp(snapshot.data['present']);
+            if (!snapshot.hasData) return LinearProgressIndicator();
+            return Container(
+                padding: EdgeInsets.symmetric(horizontal: 15.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    SizedBox(height: 30),
+                    Text("제 1전공: " + snapshot.data['major1'],
+                        style: TextStyle(fontSize: 18.0, color: Colors.white),
+                        maxLines: 1),
+                    SizedBox(height: 30,),
+                    Text("제 2전공: " + snapshot.data['major2'],
+                        style: TextStyle(fontSize: 18.0, color: Colors.white),
+                        maxLines: 1),
+                    SizedBox(height: 30,),
+                    Text("여태까지 들은 학점: " + snapshot.data['present'].toString(),
+                        style: TextStyle(fontSize: 18.0, color: Colors.white),
+                        maxLines: 1),
+                    SizedBox(height: 30,),
+                    Text(
+                        "졸업까지 들어야 할 학점: " + snapshot.data['require'].toString(),
+                        style: TextStyle(fontSize: 18.0, color: Colors.white),
+                        maxLines: 1),
+                    SizedBox(height: 30,),
+                    Text("여태까지 들은 학점 평균: " + (snapshot.data['sum'] / snapshot.data['present'])
+                        .toStringAsFixed(3),
+                      style: TextStyle(fontSize: 18.0, color: Colors.white),
+                    ),
+                    SizedBox(height: 30),
+                    RaisedButton(
+                      color: Colors.greenAccent,
+                      child: Text(
+                          "세부현황 보기"
+                      ),
+                      onPressed: () {
+                        print(uid);
+                      },
+                    ),
+                    Container(
+                      padding: const EdgeInsets.symmetric(vertical: 8.0),
+                      child: Center(
+                        child: Column(
+                          children: <Widget>[
+                            Container(
+                              child: CustomPaint(
+                                size: Size(150, 300),
+                                painter: PieChart(),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                )
+            );
+          },
+        )
+      // _buildBody(context),
+    );
+
+    /*
         FutureBuilder(
           future: Firestore.instance.collection('user').document(uid).get(),
           builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
@@ -114,7 +181,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 builder: (context, snapshot) {
                   _getp();
                   final record = Record.fromSnapshot(snapshot.data);
-              //    if (snapshot.data == null) return LinearProgressIndicator();
+                  if (snapshot.data == null) return LinearProgressIndicator();
                   return Container(
                       padding: EdgeInsets.symmetric(horizontal: 15.0),
                       child: Column(
@@ -174,75 +241,10 @@ class _ProfilePageState extends State<ProfilePage> {
             }
           },
         ),
-        */
+    );*/
 
 
-        StreamBuilder<DocumentSnapshot>(
-          stream: Firestore.instance.collection("user")
-              .document(args.uid)
-              .snapshots(),
-          builder: (context, snapshot) {
-            getp(snapshot.data['present']);
-            if (!snapshot.hasData) return LinearProgressIndicator();
-            return Container(
-                padding: EdgeInsets.symmetric(horizontal: 15.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    SizedBox(height: 30),
-                    Text("제 1전공: " + snapshot.data['major1'],
-                        style: TextStyle(fontSize: 18.0, color: Colors.white),
-                        maxLines: 1),
-                    SizedBox(height: 30,),
-                    Text("제 2전공: " + snapshot.data['major2'],
-                        style: TextStyle(fontSize: 18.0, color: Colors.white),
-                        maxLines: 1),
-                    SizedBox(height: 30,),
-                    Text("여태까지 들은 학점: " + snapshot.data['present'].toString(),
-                        style: TextStyle(fontSize: 18.0, color: Colors.white),
-                        maxLines: 1),
-                    SizedBox(height: 30,),
-                    Text(
-                        "졸업까지 들어야 할 학점: " + snapshot.data['require'].toString(),
-                        style: TextStyle(fontSize: 18.0, color: Colors.white),
-                        maxLines: 1),
-                    SizedBox(height: 30,),
-                    Text("여태까지 들은 학점 평균: " + (snapshot.data['sum'] / snapshot.data['present'])
-                        .toStringAsFixed(3),
-                        style: TextStyle(fontSize: 18.0, color: Colors.white),
-                    ),
-                    SizedBox(height: 30),
-                    RaisedButton(
-                      color: Colors.greenAccent,
-                      child: Text(
-                          "세부현황 보기"
-                      ),
-                      onPressed: () {
-                        print(uid);
-                      },
-                    ),
-                    Container(
-                      padding: const EdgeInsets.symmetric(vertical: 8.0),
-                      child: Center(
-                        child: Column(
-                          children: <Widget>[
-                            Container(
-                              child: CustomPaint(
-                                size: Size(150, 300),
-                                painter: PieChart(),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
-                )
-            );
-          },
-        )
-      // _buildBody(context),
-    );
+
   }
     void _signOut() async {
       await _auth.signOut();

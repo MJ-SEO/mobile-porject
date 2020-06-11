@@ -91,6 +91,7 @@ class _HomePageState extends State<HomePage> {
                       _gerCur();
                       print(uid);
                       Navigator.pushNamed(context, "/GLS", arguments: Glsarg(uid));
+                      
                 },
               ),
               RaisedButton(
